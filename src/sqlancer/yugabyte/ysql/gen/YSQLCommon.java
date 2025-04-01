@@ -98,7 +98,7 @@ public final class YSQLCommon {
         } else if (Randomly.getBoolean() && !isTemporaryTable) {
             if (Randomly.getBoolean()) {
                 sb.append(" SPLIT INTO ");
-                sb.append(Randomly.smallNumber() + 1);
+                sb.append(Randomly.smallNumber() + 2);
                 sb.append(" TABLETS ");
 
                 errors.add("cannot create colocated table with split option");
@@ -156,12 +156,6 @@ public final class YSQLCommon {
                     }
                 }
                 sb.append(")");
-            }
-        } else if (Randomly.getBoolean()) {
-            errors.add("Cannot use TABLEGROUP with TEMP table");
-            if (!globalState.getSchema().getDatabaseIsColocated(globalState.getConnection())) {
-                sb.append(" TABLEGROUP tg").append(
-                        Randomly.getNotCachedInteger(1, (int) YSQLTableGroupGenerator.UNIQUE_TABLEGROUP_COUNTER.get()));
             }
         }
     }

@@ -34,7 +34,6 @@ import sqlancer.yugabyte.ysql.gen.YSQLNotifyGenerator;
 import sqlancer.yugabyte.ysql.gen.YSQLSequenceGenerator;
 import sqlancer.yugabyte.ysql.gen.YSQLSetGenerator;
 import sqlancer.yugabyte.ysql.gen.YSQLTableGenerator;
-import sqlancer.yugabyte.ysql.gen.YSQLTableGroupGenerator;
 import sqlancer.yugabyte.ysql.gen.YSQLTransactionGenerator;
 import sqlancer.yugabyte.ysql.gen.YSQLTruncateGenerator;
 import sqlancer.yugabyte.ysql.gen.YSQLUpdateGenerator;
@@ -89,9 +88,6 @@ public class YSQLProvider extends SQLProviderAdapter<YSQLGlobalState, YSQLOption
             nrPerformed = r.getInteger(0, 3);
             break;
         case ANALYZE:
-            nrPerformed = r.getInteger(0, 3);
-            break;
-        case TABLEGROUP:
             nrPerformed = r.getInteger(0, 3);
             break;
         case DELETE:
@@ -304,7 +300,7 @@ public class YSQLProvider extends SQLProviderAdapter<YSQLGlobalState, YSQLOption
                 // throw new IgnoreMeException();
                 // }
 
-                sb.append("COLOCATED = true ");
+                sb.append("COLOCATION = true ");
             }
 
             for (String lc : Arrays.asList("LC_COLLATE", "LC_CTYPE")) {
@@ -339,7 +335,6 @@ public class YSQLProvider extends SQLProviderAdapter<YSQLGlobalState, YSQLOption
         INSERT(YSQLInsertGenerator::insert), //
         UPDATE(YSQLUpdateGenerator::create), //
         TRUNCATE(YSQLTruncateGenerator::create), //
-        TABLEGROUP(YSQLTableGroupGenerator::create), //
         VACUUM(YSQLVacuumGenerator::create), //
         SET(YSQLSetGenerator::create), // TODO insert yugabyte sets
         SET_CONSTRAINTS((g) -> {

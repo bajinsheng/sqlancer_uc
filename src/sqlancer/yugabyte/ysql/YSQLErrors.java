@@ -17,7 +17,7 @@ public final class YSQLErrors {
         errors.add("Conflicts with committed transaction");
         errors.add("cannot be changed");
         errors.add("SET TRANSACTION ISOLATION LEVEL must be called before any query");
-
+        errors.add("invalid byte sequence");
         errors.add("FULL JOIN is only supported with merge-joinable or hash-joinable join conditions");
         errors.add("but it cannot be referenced from this part of the query");
         errors.add("missing FROM-clause entry for table");
@@ -65,6 +65,7 @@ public final class YSQLErrors {
         errors.add("invalid reference to FROM-clause entry for table");
 
         errors.add("Invalid column number");
+        errors.add("cannot split table");
         errors.add("specified more than once");
         errors.add("You might need to add explicit type casts");
         errors.add("invalid regular expression");
@@ -149,8 +150,9 @@ public final class YSQLErrors {
         errors.add("requested character too large for encoding"); // chr
         errors.add("null character not permitted"); // chr
         errors.add("requested character not valid for encoding"); // chr
+        errors.add("character number must be positive"); // chr
         errors.add("requested length too large"); // repeat
-        errors.add("invalid memory alloc request size"); // repeat
+        errors.add("invalid memory alloc request size"); // repeat/z
         errors.add("encoding conversion from UTF8 to ASCII not supported"); // to_ascii
         errors.add("negative substring length not allowed"); // substr
         errors.add("invalid mask length"); // set_masklen

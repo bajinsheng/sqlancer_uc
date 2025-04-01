@@ -103,7 +103,6 @@ public final class YSQLIndexGenerator {
         errors.add("because it has pending trigger events");
         errors.add("duplicate key value violates unique constraint");
         errors.add("could not determine which collation to use for");
-        errors.add("index method \"gist\" not supported yet");
         errors.add("is duplicated");
         errors.add("already exists");
         errors.add("could not create unique index");
@@ -137,7 +136,7 @@ public final class YSQLIndexGenerator {
     }
 
     public enum IndexType {
-        BTREE, HASH, GIST, GIN
+        BTREE, HASH, GIN
     }
 
 }

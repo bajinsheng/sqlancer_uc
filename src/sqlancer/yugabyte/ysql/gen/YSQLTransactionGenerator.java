@@ -24,4 +24,8 @@ public final class YSQLTransactionGenerator {
         return new SQLQueryAdapter(sb.toString(), errors, true);
     }
 
+    public static SQLQueryAdapter executeRollback() {
+        return new SQLQueryAdapter("ROLLBACK");
+    }
+
 }
