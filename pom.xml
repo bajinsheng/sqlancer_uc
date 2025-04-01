@@ -267,6 +267,38 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>compile-native</id>
+            <phase>compile</phase>
+            <configuration>
+              <target>
+                <!-- Create output directory for native libs -->
+                <mkdir dir="${project.build.directory}/native"/>
+                <!-- Compile the shared library -->
+                <exec executable="gcc">
+                  <arg value="-fPIC"/>
+                  <arg value="-I${JAVA_HOME}/include"/>
+                  <arg value="-I${JAVA_HOME}/include/linux"/>
+                  <arg value="-shared"/>
+                  <arg value="-o"/>
+                  <arg value="${project.build.directory}/native/libutilshm.so"/>
+                  <arg value="src/sqlancer/c/shm_jni.c"/>
+                  <arg value="-lrt"/>
+                  <arg value="-pthread"/>
+                </exec>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
