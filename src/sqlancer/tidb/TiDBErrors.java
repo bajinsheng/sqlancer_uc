@@ -43,6 +43,7 @@ public final class TiDBErrors {
         errors.add("from regexp");
         errors.add("Empty pattern is invalid");
         errors.add("Invalid regexp pattern");
+        errors.add("Unknown column");
 
         // To avoid incomplete TiFlash replication
         errors.add("different from the tiflash storage schema");
