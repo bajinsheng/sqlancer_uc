@@ -21,7 +21,7 @@ public class CockroachDBSchema extends AbstractSchema<CockroachDBGlobalState, Co
     public enum CockroachDBDataType {
 
         INT, BOOL, STRING, FLOAT, BYTES, BIT, VARBIT, SERIAL, INTERVAL, TIMESTAMP, TIMESTAMPTZ, DECIMAL, JSONB, TIME,
-        TIMETZ, ARRAY;
+        TIMETZ;
 
         public static CockroachDBDataType getRandom() {
             return Randomly.fromOptions(values());
@@ -52,9 +52,7 @@ public class CockroachDBSchema extends AbstractSchema<CockroachDBGlobalState, Co
         }
 
         public CockroachDBCompositeDataType(CockroachDBDataType dataType, CockroachDBCompositeDataType elementType) {
-            if (dataType != CockroachDBDataType.ARRAY) {
-                throw new IllegalArgumentException();
-            }
+
             this.dataType = dataType;
             this.size = -1;
             this.elementType = elementType;
@@ -121,8 +119,6 @@ public class CockroachDBSchema extends AbstractSchema<CockroachDBGlobalState, Co
                 } else {
                     return String.format("VARBIT(%d)", size);
                 }
-            case ARRAY:
-                return String.format("%s[]", elementType.toString());
             default:
                 return dataType.toString();
             }
@@ -140,23 +136,8 @@ public class CockroachDBSchema extends AbstractSchema<CockroachDBGlobalState, Co
                 return new CockroachDBCompositeDataType(randomDataType, (int) Randomly.getNotCachedInteger(1, 200));
             } else if (randomDataType == CockroachDBDataType.VARBIT) {
                 return new CockroachDBCompositeDataType(randomDataType, (int) Randomly.getNotCachedInteger(1, 200));
-            } else if (randomDataType == CockroachDBDataType.ARRAY) {
-                return new CockroachDBCompositeDataType(randomDataType, getRandomForType(getArrayElementType()));
             } else {
                 return new CockroachDBCompositeDataType(randomDataType);
-            }
-        }
-
-        private static CockroachDBDataType getArrayElementType() {
-            while (true) {
-                CockroachDBDataType type = CockroachDBDataType.getRandom();
-                if (type != CockroachDBDataType.ARRAY && type != CockroachDBDataType.JSONB) {
-                    // nested arrays are not supported:
-                    // https://github.com/cockroachdb/cockroach/issues/32552
-                    // JSONB arrays are not supported as well:
-                    // https://github.com/cockroachdb/cockroach/issues/23468
-                    return type;
-                }
             }
         }
 
@@ -213,11 +194,6 @@ public class CockroachDBSchema extends AbstractSchema<CockroachDBGlobalState, Co
     }
 
     private static CockroachDBCompositeDataType getColumnType(String typeString) {
-        if (typeString.endsWith("[]")) {
-            String substring = typeString.substring(0, typeString.length() - 2);
-            CockroachDBCompositeDataType elementType = getColumnType(substring);
-            return new CockroachDBCompositeDataType(CockroachDBDataType.ARRAY, elementType);
-        }
         if (typeString.startsWith("STRING COLLATE")) {
             return new CockroachDBCompositeDataType(CockroachDBDataType.STRING);
         }

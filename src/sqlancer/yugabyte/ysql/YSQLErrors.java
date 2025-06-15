@@ -27,6 +27,7 @@ public final class YSQLErrors {
         errors.add("non-integer constant in");
         errors.add("must appear in the GROUP BY clause or be used in an aggregate function");
         errors.add("GROUP BY position");
+        errors.add("cannot convert infinity to integer");
 
         return errors;
     }

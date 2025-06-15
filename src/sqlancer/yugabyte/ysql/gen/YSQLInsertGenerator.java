@@ -36,6 +36,8 @@ public final class YSQLInsertGenerator {
         errors.add("new row violates check option for view");
         errors.add("reached maximum value of sequence");
         errors.add("but expression is of type");
+        errors.add("schema version mismatch");
+        errors.add("non-DEFAULT value");
         StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO ");
         sb.append(table.getName());

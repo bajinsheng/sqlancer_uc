@@ -173,20 +173,9 @@ public enum CockroachDBFunction {
         /*
          * This is a workaround based on the assumption that array types should refer to the same element type.
          */
-        CockroachDBCompositeDataType savedArrayType = null;
-        if (returnType2.getPrimitiveDataType() == CockroachDBDataType.ARRAY) {
-            savedArrayType = returnType2;
-        }
         for (CockroachDBDataType arg : argumentTypes2) {
             CockroachDBCompositeDataType type;
-            if (arg == CockroachDBDataType.ARRAY) {
-                if (savedArrayType == null) {
-                    savedArrayType = arg.get();
-                }
-                type = savedArrayType;
-            } else {
-                type = arg.get();
-            }
+            type = arg.get();
             arguments.add(gen.generateExpression(type, depth + 1));
         }
         return arguments;

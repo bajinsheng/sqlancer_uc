@@ -28,7 +28,6 @@ import sqlancer.cockroachdb.gen.CockroachDBDropTableGenerator;
 import sqlancer.cockroachdb.gen.CockroachDBDropViewGenerator;
 import sqlancer.cockroachdb.gen.CockroachDBIndexGenerator;
 import sqlancer.cockroachdb.gen.CockroachDBInsertGenerator;
-import sqlancer.cockroachdb.gen.CockroachDBRandomQuerySynthesizer;
 import sqlancer.cockroachdb.gen.CockroachDBSetClusterSettingGenerator;
 import sqlancer.cockroachdb.gen.CockroachDBSetSessionGenerator;
 import sqlancer.cockroachdb.gen.CockroachDBShowGenerator;
@@ -62,26 +61,6 @@ public class CockroachDBProvider extends SQLProviderAdapter<CockroachDBGlobalSta
         DROP_VIEW(CockroachDBDropViewGenerator::drop), //
         COMMENT_ON(CockroachDBCommentOnGenerator::comment), //
         SHOW(CockroachDBShowGenerator::show), //
-        TRANSACTION((g) -> {
-            String s = Randomly.fromOptions("BEGIN", "ROLLBACK", "COMMIT");
-            return new SQLQueryAdapter(s, ExpectedErrors.from("there is no transaction in progress",
-                    "there is already a transaction in progress", "current transaction is aborted"));
-        }), EXPLAIN((g) -> {
-            StringBuilder sb = new StringBuilder("EXPLAIN ");
-            ExpectedErrors errors = new ExpectedErrors();
-            if (Randomly.getBoolean()) {
-                sb.append("(");
-                sb.append(Randomly.fromOptions("VERBOSE", "TYPES", "OPT", "DISTSQL", "VEC"));
-                sb.append(") ");
-                errors.add("cannot set EXPLAIN mode more than once");
-                errors.add("unable to vectorize execution plan");
-                errors.add("unsupported type");
-                errors.add("vectorize is set to 'off'");
-            }
-            sb.append(CockroachDBRandomQuerySynthesizer.generate(g, Randomly.smallNumber() + 1));
-            CockroachDBErrors.addExpressionErrors(errors);
-            return new SQLQueryAdapter(sb.toString(), errors);
-        }), //
         SCRUB((g) -> new SQLQueryAdapter(
                 "EXPERIMENTAL SCRUB table " + g.getSchema().getRandomTable(t -> !t.isView()).getName(),
                 // https://github.com/cockroachdb/cockroach/issues/46401
@@ -137,7 +116,6 @@ public class CockroachDBProvider extends SQLProviderAdapter<CockroachDBGlobalSta
 
         standardSettings.add("-- Disable the collection of metrics and hope that it helps performance");
         standardSettings.add("SET CLUSTER SETTING sql.metrics.statement_details.enabled = 'off'");
-        standardSettings.add("SET CLUSTER SETTING sql.metrics.statement_details.plan_collection.enabled = 'off'");
         standardSettings.add("SET CLUSTER SETTING sql.stats.automatic_collection.enabled = 'off'");
         standardSettings.add("SET CLUSTER SETTING timeseries.storage.enabled = 'off'");
 
@@ -177,9 +155,6 @@ public class CockroachDBProvider extends SQLProviderAdapter<CockroachDBGlobalSta
             case SPLIT:
                 nrPerformed = globalState.getRandomly().getInteger(0, 3);
                 break;
-            case EXPLAIN:
-                nrPerformed = globalState.getRandomly().getInteger(0, 10);
-                break;
             case SHOW:
             case TRUNCATE:
             case DELETE:
@@ -203,7 +178,6 @@ public class CockroachDBProvider extends SQLProviderAdapter<CockroachDBGlobalSta
                                   * https://github.com/cockroachdb/cockroach/issues/47116 crashes the server
                                   */
                 break;
-            case TRANSACTION:
             case CREATE_TABLE:
             case DROP_TABLE:
             case DROP_VIEW:

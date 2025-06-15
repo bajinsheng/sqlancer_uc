@@ -165,7 +165,6 @@ public class CockroachDBExpressionGenerator extends
             case JSONB:
             case TIME:
             case TIMETZ:
-            case ARRAY:
                 return generateLeafNode(type); // TODO
             default:
                 throw new AssertionError(type);
@@ -323,12 +322,6 @@ public class CockroachDBExpressionGenerator extends
             return CockroachDBConstant.createTimeConstant(globalState.getRandomly().getInteger());
         case TIMETZ:
             return CockroachDBConstant.createTimetz(globalState.getRandomly().getInteger());
-        case ARRAY:
-            List<CockroachDBExpression> elements = new ArrayList<>();
-            for (int i = 0; i < Randomly.smallNumber(); i++) {
-                elements.add(generateConstant(type.getElementType()));
-            }
-            return CockroachDBConstant.createArrayConstant(elements);
         case JSONB:
             return CockroachDBConstant.createNullConstant(); // TODO
         default:

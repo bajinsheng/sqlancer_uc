@@ -62,8 +62,6 @@ public final class YSQLSetGenerator {
         YB_TEST_SYSTEM_CATALOGS_CREATION("yb_test_system_catalogs_creation",
                 (r) -> Randomly.fromOptions("false", "true")),
         YB_TEST_FAIL_NEXT_DDL("yb_test_fail_next_ddl", (r) -> Randomly.fromOptions("false", "true")),
-        YB_DISABLE_TRANSACTIONAL_WRITES("yb_disable_transactional_writes",
-                (r) -> Randomly.fromOptions("false", "true")),
         YB_ENABLE_OPTIMIZER_STATISTICS("yb_enable_optimizer_statistics", (r) -> Randomly.fromOptions("false", "true")),
         YB_ENABLE_EXPRESSION_PUSHDOWN("yb_enable_expression_pushdown", (r) -> Randomly.fromOptions("false", "true")),
         YB_ENABLE_UPSERT_MODE("yb_enable_upsert_mode", (r) -> Randomly.fromOptions("false", "true")),

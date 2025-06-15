@@ -58,6 +58,8 @@ public class YSQLTableGenerator {
         errors.add("Cannot split table that does not have primary key");
         errors.add("inherits from generated column but specifies identity");
         errors.add("inherits from generated column but specifies default");
+        errors.add("cannot be cast");
+        errors.add("OBJECT_NOT_FOUND");
         YSQLErrors.addCommonExpressionErrors(errors);
         YSQLErrors.addCommonTableErrors(errors);
     }

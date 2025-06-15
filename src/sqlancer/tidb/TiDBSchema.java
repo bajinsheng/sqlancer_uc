@@ -243,6 +243,7 @@ public class TiDBSchema extends AbstractSchema<TiDBGlobalState, TiDBTable> {
                 size = 8;
                 primitiveType = TiDBDataType.FLOATING;
                 break;
+            case "tinyint":
             case "tinyint(1)":
                 primitiveType = TiDBDataType.BOOL;
                 size = 1;
@@ -257,11 +258,13 @@ public class TiDBSchema extends AbstractSchema<TiDBGlobalState, TiDBTable> {
                 primitiveType = TiDBDataType.INT;
                 size = 1;
                 break;
+            case "smallint":
             case "smallint(5)":
             case "smallint(6)":
                 primitiveType = TiDBDataType.INT;
                 size = 2;
                 break;
+            case "int":
             case "int(10)":
             case "int(11)":
                 primitiveType = TiDBDataType.INT;

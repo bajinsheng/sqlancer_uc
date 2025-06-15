@@ -29,9 +29,12 @@ public final class YSQLRandomQueryGenerator {
         }
         YSQLSelect select = new YSQLSelect();
         select.setSelectType(SelectType.getRandom());
+        // Cause false alarms similar to GROUP BY, the results are not deterministic
+        /*
         if (select.getSelectOption() == SelectType.DISTINCT && Randomly.getBoolean()) {
             select.setDistinctOnClause(gen.generateExpression(0));
         }
+        */
         select.setFromList(tables.getTables().stream().map(t -> new YSQLFromTable(t, Randomly.getBoolean()))
                 .collect(Collectors.toList()));
         select.setFetchColumns(columns);

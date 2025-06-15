@@ -44,10 +44,8 @@ public final class TiDBErrors {
         errors.add("Empty pattern is invalid");
         errors.add("Invalid regexp pattern");
 
-        // To avoid bugs
-        errors.add("Unknown column"); // https://github.com/pingcap/tidb/issues/35522
-        errors.add("Can\'t find column"); // https://github.com/pingcap/tidb/issues/35527
-        errors.add("Cannot convert"); // https://github.com/pingcap/tidb/issues/35652
+        // To avoid incomplete TiFlash replication
+        errors.add("different from the tiflash storage schema");
 
         if (TiDBBugs.bug35677) {
             errors.add("for function inet_aton");
